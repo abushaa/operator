@@ -28,7 +28,7 @@ class Fraction {
 
                 Fraction( int value ) : numerator(value), denominator(1) {}
 
-                int getNumerator() const { return numerator; }
+                int getNumerator() const { return this->numerator; }
                 int getDenominator() const { return denominator; }
 
                 double getValue() const {
@@ -47,8 +47,8 @@ class Fraction {
                 }
 
 
-                Fraction operator-(Fraction &a) {
-                        int commonDenominator = a.getDenominator() * getDenominator();
+                Fraction operator-(const Fraction &a) {
+                        int commonDenominator = abs(a.getDenominator() * getDenominator());
                         int commonNumerator = a.getNumerator() * getDenominator() - getNumerator() * a.getDenominator();
                         return Fraction(commonNumerator, commonDenominator);
                 }
@@ -74,30 +74,35 @@ class Fraction {
     bool operator>(const Fraction &a) {return compareTo(a)>0;}
     bool operator<=(const Fraction &a) { return compareTo(a)<=0;}
     bool operator>=(const Fraction &a) { return compareTo(a)>=0;}
-
-    Fraction operator*(const Fraction &a, const int b) {
-        int newNumerator = a.getNumerator() * b;
-        return Fraction(newNumerator, a.getDenominator());
-
-    }
-
-    Fraction operator+(const Fraction &a, const int b) {
-        int newNumerator = a.getDenominator()*b + a.getNumerator();
-        return Fraction(newNumerator, a.getDenominator());
-    }
-
-    Fraction operator-(const Fraction &a, const int b) {
-        int newNumerator = a.getNumerator() - a.getDenominator()*b;
-        return Fraction(newNumerator, a.getDenominator());
-    }
-
-    Fraction operator/(const Fraction &a, const int b){
-        int newDenominator = a.getDenominator()*b;
-        return Fraction(a.getNumerator(), newDenominator);
-    }
-
-
     };
+
+Fraction operator*(Fraction a, int b) {
+    return a*Fraction(b);
+}
+Fraction operator*(int b, Fraction a) {
+    return Fraction(b)*a;
+}
+
+Fraction operator+(Fraction a, int b) {
+    return a + Fraction(b);
+}
+Fraction operator+(int b, Fraction a) {
+    return Fraction(b) + a;
+}
+
+Fraction operator-(Fraction a, int b) {
+    return a + Fraction(-b);
+}
+Fraction operator-(int b, Fraction a) {
+    return Fraction(b) + (a*(-1));
+}
+
+Fraction operator/(int b, Fraction a) {
+    return Fraction(b) / a;
+}
+Fraction operator/(Fraction a, int b) {
+    return a / Fraction(b);
+}
 
 std::ostream &operator<<(std::ostream &stream, const Fraction& a) {
         return stream << a.getNumerator() << "/" << a.getDenominator();
@@ -113,4 +118,5 @@ int main(int argc, char **argv) {
         Fraction a(-4, 7), b(1, 3), c(0, 4);
         std::cout << c << " " << a * c << std::endl;
         std::cout << (a < b) << " " << power(Fraction(1, 4), -1) << std::endl;
+        std::cout << (a-2) << " " <<(2*b) << " " << (2-a) << std::endl;
 }
